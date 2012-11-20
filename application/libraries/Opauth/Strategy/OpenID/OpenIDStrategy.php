@@ -61,12 +61,6 @@ class OpenIDStrategy extends OpauthStrategy{
 		$this->openid = new LightOpenID($parsed['host']);
 		$this->openid->required = $this->strategy['required'];
 		$this->openid->optional = $this->strategy['optional'];
-        
-        //Delete from here to allow user introduce openid_url manually.
-            $CI =& get_instance();
-            $opauth_config = $CI->config->item('opauth_config');
-            $this->openid->identity = $opauth_config['Strategy']['OpenID']['openid_url'];
-        //end
 	}
 	
 	/**
@@ -74,25 +68,23 @@ class OpenIDStrategy extends OpauthStrategy{
 	 */
 	public function request(){
 		if (!$this->openid->mode){
-            //Uncomment this lines, to allow user introduce openid_url manually.  
-    			//if (empty($_POST['openid_url'])){
-    				//$this->render($this->strategy['identifier_form']);
-    			//}
-    			//else{
-    				//$this->openid->identity = $_POST['openid_url'];
-    				try{
-    					$this->redirect($this->openid->authUrl());
-    				} catch (Exception $e){
-    					$error = array(
-    						'provider' => 'OpenID',
-    						'code' => 'bad_identifier',
-    						'message' => $e->getMessage()
-    					);
-    
-    					$this->errorCallback($error);
-    				}
-    			//}
-            //end
+			if (empty($_POST['openid_url'])){
+				$this->render($this->strategy['identifier_form']);
+			}
+			else{
+				$this->openid->identity = $_POST['openid_url'];
+				try{
+					$this->redirect($this->openid->authUrl());
+				} catch (Exception $e){
+					$error = array(
+						'provider' => 'OpenID',
+						'code' => 'bad_identifier',
+						'message' => $e->getMessage()
+					);
+
+					$this->errorCallback($error);
+				}
+			}
 		}
 		elseif ($this->openid->mode == 'cancel'){
 			$error = array(

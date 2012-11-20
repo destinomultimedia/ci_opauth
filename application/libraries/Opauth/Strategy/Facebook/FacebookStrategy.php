@@ -5,10 +5,10 @@
  * 
  * More information on Opauth: http://opauth.org
  * 
- * @copyright		Copyright © 2012 U-Zyn Chua (http://uzyn.com)
- * @link 			http://opauth.org
- * @package			Opauth.Facebook
- * @license			MIT License
+ * @copyright    Copyright © 2012 U-Zyn Chua (http://uzyn.com)
+ * @link         http://opauth.org
+ * @package      Opauth.FacebookStrategy
+ * @license      MIT License
  */
 
 class FacebookStrategy extends OpauthStrategy{
@@ -42,7 +42,7 @@ class FacebookStrategy extends OpauthStrategy{
 		if (!empty($this->strategy['response_type'])) $params['response_type'] = $this->strategy['response_type'];
 		if (!empty($this->strategy['display'])) $params['display'] = $this->strategy['display'];
 		
-		$this->redirect($url.'?'.http_build_query($params));
+		$this->clientGet($url, $params);
 	}
 	
 	/**

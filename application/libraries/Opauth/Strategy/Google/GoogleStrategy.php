@@ -5,10 +5,10 @@
  * 
  * More information on Opauth: http://opauth.org
  * 
- * @copyright		Copyright © 2012 U-Zyn Chua (http://uzyn.com)
- * @link 			http://opauth.org
- * @package			Opauth.Google
- * @license			MIT License
+ * @copyright    Copyright © 2012 U-Zyn Chua (http://uzyn.com)
+ * @link         http://opauth.org
+ * @package      Opauth.GoogleStrategy
+ * @license      MIT License
  */
 
 /**
@@ -54,7 +54,7 @@ class GoogleStrategy extends OpauthStrategy{
 			if (!empty($this->strategy[$key])) $params[$key] = $this->strategy[$key];
 		}
 		
-		$this->redirect($url.'?'.http_build_query($params));
+		$this->clientGet($url, $params);
 	}
 	
 	/**

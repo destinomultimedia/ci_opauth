@@ -5,10 +5,10 @@
  * 
  * More information on Opauth: http://opauth.org
  * 
- * @copyright		Copyright © 2012 U-Zyn Chua (http://uzyn.com)
- * @link 			http://opauth.org
- * @package			Opauth.Twitter
- * @license			MIT License
+ * @copyright    Copyright © 2012 U-Zyn Chua (http://uzyn.com)
+ * @link         http://opauth.org
+ * @package      Opauth.TwitterStrategy
+ * @license      MIT License
  */
 
 class TwitterStrategy extends OpauthStrategy{
@@ -150,7 +150,7 @@ class TwitterStrategy extends OpauthStrategy{
 			'oauth_token' => $oauth_token
 		);
 
-		$this->redirect($this->strategy['authorize_url'].'?'.http_build_query($params));
+		$this->clientGet($this->strategy['authorize_url'], $params);
 	}
 	
 	private function _verify_credentials($user_token, $user_token_secret){

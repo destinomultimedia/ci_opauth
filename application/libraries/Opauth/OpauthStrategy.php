@@ -169,8 +169,10 @@ class OpauthStrategy{
 				$this->clientPost($this->env['callback_url'], array('opauth' => base64_encode(serialize($data))));
 				break;
 			case 'session':
-			default:			
-				session_start();
+			default:
+				if (!isset($_SESSION)){
+					session_start();
+				}
 				$_SESSION['opauth'] = $data;
 				$this->redirect($this->env['callback_url']);
 		}
@@ -397,7 +399,7 @@ class OpauthStrategy{
 			$context = stream_context_create($options);
 		}
 
-		$content = @file_get_contents($url, false, $context);
+		$content = file_get_contents($url, false, $context);
 		$responseHeaders = implode("\r\n", $http_response_header);
 
 		return $content;

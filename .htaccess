@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteRule ^$ /ci_opauth/index.php [L]
+RewriteCond $1 !^(index\.php|img|assets|css|js|robots\.txt|favicon\.ico)
+RewriteRule ^(.*)$ /ci_opauth/index.php/$1 [L]
