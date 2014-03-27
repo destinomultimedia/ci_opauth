@@ -17,7 +17,7 @@ class TwitterStrategy extends OpauthStrategy {
 	 * Compulsory parameters
 	 */
 	public $expects = array('key', 'secret');
-	
+    	private $CI;
 	/**
 	 * Optional parameters
 	 */
@@ -60,7 +60,7 @@ class TwitterStrategy extends OpauthStrategy {
 		
 		$this->strategy['consumer_key'] = $this->strategy['key'];
 		$this->strategy['consumer_secret'] = $this->strategy['secret'];
-		
+        	$this->CI =& get_instance();
 		require dirname(__FILE__).'/Vendor/tmhOAuth/tmhOAuth.php';
 		$this->tmhOAuth = new tmhOAuth($this->strategy);
 	}
@@ -79,8 +79,7 @@ class TwitterStrategy extends OpauthStrategy {
 			if (!session_id()) {
 				session_start();
 			}
-			$_SESSION['_opauth_twitter'] = $results;
-
+            		$this->CI->session->set_flashdata(array('_opauth_twitter' => $results));
 			$this->_authorize($results['oauth_token']);
 		}
 	}
@@ -89,18 +88,15 @@ class TwitterStrategy extends OpauthStrategy {
 	 * Receives oauth_verifier, requests for access_token and redirect to callback
 	 */
 	public function oauth_callback() {
-		if (!session_id()) {
-			session_start();
-		}
-		$session = $_SESSION['_opauth_twitter'];
-		unset($_SESSION['_opauth_twitter']);
 
-		if (!empty($_REQUEST['oauth_token']) && $_REQUEST['oauth_token'] == $session['oauth_token']) {
+        	$session = $this->CI->session->flashdata('_opauth_twitter');
+
+		if (!empty($_GET['oauth_token']) && $_GET['oauth_token'] == $session['oauth_token']) {
 			$this->tmhOAuth->config['user_token'] = $session['oauth_token'];
 			$this->tmhOAuth->config['user_secret'] = $session['oauth_token_secret'];
 			
 			$params = array(
-				'oauth_verifier' => $_REQUEST['oauth_verifier']
+				'oauth_verifier' => $_GET['oauth_verifier']
 			);
 		
 			$results =  $this->_request('POST', $this->strategy['access_token_url'], $params);
